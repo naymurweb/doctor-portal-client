@@ -8,48 +8,41 @@ const Footer = () => {
         <div>
           <span className="footer-title">Services</span>
           <Link to="/" className="link link-hover">
-            Branding
+          Emergency Checkup
           </Link>
           <Link to="/" className="link link-hover">
-            Design
+          Monthly Checkup
           </Link>
           <Link to="/" className="link link-hover">
-            Marketing
+          Weekly Checkup  
           </Link>
           <Link to="/" className="link link-hover">
-            Advertisement
+          Deep Checkup
           </Link>
         </div>
         <div>
-          <span className="footer-title">Company</span>
+          <span className="footer-title">ORAL HEALTH </span>
           <Link to="/" className="link link-hover">
-            About us
+          Fluoride Treatment
           </Link>
           <Link to="/" className="link link-hover">
-            Contact
+          Cavity Filling  
           </Link>
           <Link to="/" className="link link-hover">
-            Jobs
+          Teath Whitening   
           </Link>
-          <Link to="/" className="link link-hover">
-            Press kit
-          </Link>
+
         </div>
         <div>
-          <span className="footer-title">Legal</span>
+          <span className="footer-title">OUR ADDRESS</span>
           <Link to="/" className="link link-hover">
-            Terms of use
+          New York - 101010 Hudson
           </Link>
-          <Link to="/" className="link link-hover">
-            Privacy policy
-          </Link>
-          <Link to="/" className="link link-hover">
-            Cookie policy
-          </Link>
+      
         </div>
       </div>
       <div className="my mt-24 text-center text-accent">
-        <p>Copyright © 2023 - All right reserved by ACME Industries Ltd</p>
+        <p>Copyright 2023 All Rights Reserved</p>
       </div>
     </footer>
   );
