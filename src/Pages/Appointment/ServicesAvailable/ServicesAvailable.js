@@ -1,16 +1,33 @@
 import { format } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery } from "react-query";
+import Loading from "../../Shared/Loading/Loading";
 import BookingModal from "../BookingModal/BookingModal";
 import AppointmentService from "./AppointmentService";
 
 const ServicesAvailable = ({ selected }) => {
-  const [services, setSerices] = useState([]);
-  const [treatment,setTreatment]=useState(null)
-  useEffect(() => {
-    fetch("AppointmentServices.json")
-      .then((res) => res.json())
-      .then((data) => setSerices(data));
-  }, []);
+  const [treatment, setTreatment] = useState(null);
+  const date = format(selected, "PP");
+
+  const {
+    data: services = [],
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["appointmentOptions", date],
+    queryFn: async () => {
+      const res = await fetch(
+        `http://localhost:7000/appointmentOptions?date=${date}`
+      );
+      const data = await res.json();
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return <Loading></Loading>;
+  }
+
   return (
     <div className="my-20">
       <div>
@@ -31,9 +48,14 @@ const ServicesAvailable = ({ selected }) => {
             setTreatment={setTreatment}
           ></AppointmentService>
         ))}
-        {
-          treatment&&<BookingModal setTreatment={setTreatment} treatment={treatment} selected={selected}></BookingModal>
-        }
+        {treatment && (
+          <BookingModal
+            setTreatment={setTreatment}
+            treatment={treatment}
+            selected={selected}
+            refetch={refetch}
+          ></BookingModal>
+        )}
       </div>
     </div>
   );

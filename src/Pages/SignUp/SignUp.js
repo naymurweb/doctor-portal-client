@@ -1,19 +1,28 @@
 import { GoogleAuthProvider } from "firebase/auth";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthProvider";
 
 const SignUp = () => {
   const [signupError, setSignupError] = useState("");
-  const { createUser, updateUser,googleLogin } = useContext(AuthContext);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
+  const { createUser, updateUser, googleLogin, user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user?.uid) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
 
   const handleSignup = (data) => {
     setSignupError("");
@@ -26,8 +35,9 @@ const SignUp = () => {
             setSignupError(error.message);
             console.log(error);
           });
-          toast.success('create a new user')
         console.log(user);
+        navigate(from, { replace: true });
+        toast.success("create a new user");
       })
       .catch((error) => {
         setSignupError(error.message);
@@ -35,18 +45,18 @@ const SignUp = () => {
       });
   };
 
-  const googleLoginHandaler=()=>{
-    const googleProvider=new GoogleAuthProvider()
+  const googleLoginHandaler = () => {
+    const googleProvider = new GoogleAuthProvider();
     googleLogin(googleProvider)
-    .then(result=>{
-      const user=result.user
-      console.log(user);
-    })
-    .catch(error=>{
-      setSignupError(error.message)
-      console.log(error);
-    })
-  }
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        setSignupError(error.message);
+        console.log(error);
+      });
+  };
   return (
     <div className="md:my-24 my-5 flex justify-center items-center">
       <form

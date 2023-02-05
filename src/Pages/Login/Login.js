@@ -1,5 +1,5 @@
 import { GoogleAuthProvider } from "firebase/auth";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { AuthContext } from "../../Contexts/AuthProvider";
 
 const Login = () => {
   const [loginError, setLoginError] = useState("");
-  const [email,setEmail]=useState('')
+  const [email, setEmail] = useState("");
 
   const {
     register,
@@ -18,7 +18,13 @@ const Login = () => {
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
-  const { signIn, googleLogin,forgetPassword,} = useContext(AuthContext);
+  const { signIn, googleLogin, forgetPassword, user } = useContext(AuthContext);
+  
+  useEffect(() => {
+    if (user?.uid) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from])
 
   const handleLogin = (data) => {
     setLoginError("");
@@ -48,17 +54,17 @@ const Login = () => {
       });
   };
 
-  const forgotPasswordHandaler=()=>{
+  const forgotPasswordHandaler = () => {
     forgetPassword(email)
-    .then(()=>{
-      toast.success("forgot this password please chack your email");
-    })
-    .then(error=>console.log(error))
-  }
-  
-  const emailGanared=(e)=>{
+      .then(() => {
+        toast.success("forgot this password please chack your email");
+      })
+      .then((error) => console.log(error));
+  };
+
+  const emailGanared = (e) => {
     setEmail(e.target.value);
-  }
+  };
   return (
     <div className="md:my-24 my-5 flex justify-center items-center">
       <form
@@ -108,7 +114,10 @@ const Login = () => {
         </div>
 
         <label className="label">
-          <small onClick={forgotPasswordHandaler} className="label-text-alt link link-hover">
+          <small
+            onClick={forgotPasswordHandaler}
+            className="label-text-alt link link-hover"
+          >
             Forgot password?
           </small>
         </label>
@@ -138,7 +147,7 @@ const Login = () => {
           >
             CONTINUE WITH GOOGLE
           </button>
-        </div>  
+        </div>
       </form>
     </div>
   );
