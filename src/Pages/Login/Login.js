@@ -19,12 +19,12 @@ const Login = () => {
   const from = location?.state?.from?.pathname || "/";
 
   const { signIn, googleLogin, forgetPassword, user } = useContext(AuthContext);
-  
+
   useEffect(() => {
     if (user?.uid) {
       navigate(from, { replace: true });
     }
-  }, [user, navigate, from])
+  }, [user, navigate, from]);
 
   const handleLogin = (data) => {
     setLoginError("");
@@ -32,12 +32,22 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         toast.success("login user");
-        console.log(user);
-        navigate(from, { replace: true });
+        getToken(data.email);
       })
       .catch((error) => {
         setLoginError(error.message);
         console.log(error);
+      });
+  };
+
+  const getToken = (email) => {
+    fetch(`http://localhost:7000/jwt?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.accessToken) {
+          localStorage.setItem("accessToken", data.accessToken);
+          navigate(from, { replace: true });
+        }
       });
   };
 

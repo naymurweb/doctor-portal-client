@@ -7,6 +7,7 @@ import { AuthContext } from "../../Contexts/AuthProvider";
 
 const SignUp = () => {
   const [signupError, setSignupError] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -16,8 +17,9 @@ const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
-  const { createUser, updateUser, googleLogin, user } = useContext(AuthContext);
-
+  const { createUser, updateUser, googleLogin, user } =
+    useContext(AuthContext);
+  
   useEffect(() => {
     if (user?.uid) {
       navigate(from, { replace: true });
@@ -30,13 +32,14 @@ const SignUp = () => {
       .then((result) => {
         const user = result.user;
         updateUser(data.name)
-          .then(() => {})
+          .then(() => {
+            saveUser(data.name, data.email);
+          })
           .catch((error) => {
             setSignupError(error.message);
             console.log(error);
           });
         console.log(user);
-        navigate(from, { replace: true });
         toast.success("create a new user");
       })
       .catch((error) => {
@@ -57,6 +60,34 @@ const SignUp = () => {
         console.log(error);
       });
   };
+
+  const saveUser = (name, email) => {
+    const user = { name, email };
+    fetch(`http://localhost:7000/users`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        getToken(email)
+  
+      });
+  };
+
+  const getToken = (email) => {
+    fetch(`http://localhost:7000/jwt?email=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.accessToken) {
+          localStorage.setItem("accessToken", data.accessToken);
+          navigate(from, { replace: true });
+        }
+      });
+  };
+
   return (
     <div className="md:my-24 my-5 flex justify-center items-center">
       <form

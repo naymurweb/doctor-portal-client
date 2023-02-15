@@ -16,42 +16,44 @@ const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true);
+
   const createUser = (email, password) => {
-    setLoading(true)
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
   const signIn = (email, password) => {
-    setLoading(true)
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const updateUser=(name)=>{
-    return updateProfile(auth.currentUser,{
-        displayName:name
-    })
-  }
+  const updateUser = (name) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+    });
+  };
 
-  const googleLogin=(provider)=>{
-    return signInWithPopup(auth,provider)
-  }
+  const googleLogin = (provider) => {
+    return signInWithPopup(auth, provider);
+  };
 
-  const forgetPassword=(email)=>{
-    return sendPasswordResetEmail(auth,email)
-  }
+  const forgetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
 
-  const LogOut=()=>{
-    setLoading(true)
-    return signOut(auth)
-  }
+  const LogOut = () => {
+    setLoading(true);
+    return signOut(auth);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false)
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
+
 
   const userInfo = {
     createUser,
@@ -61,7 +63,7 @@ const AuthProvider = ({ children }) => {
     user,
     loading,
     forgetPassword,
-    LogOut
+    LogOut,
   };
   return (
     <div>
