@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
-import { AuthContext } from "../../../../Contexts/AuthProvider";
+import { AuthContext } from "../../../Contexts/AuthProvider";
+import Loading from "../../Shared/Loading/Loading";
 
 const MyAppointments = () => {
   const { user } = useContext(AuthContext);
 
   const url = `http://localhost:7000/bookings?email=${user.email}`;
 
-  const { data: bookings = [] } = useQuery({
+  const { data: bookings = [] ,isLoading} = useQuery({
     queryKey: ["bookings", user.email],
     queryFn: async () => {
       const res = await fetch(url,{
@@ -19,7 +20,9 @@ const MyAppointments = () => {
       return data;
     },
   });
-  console.log(bookings);
+ if(isLoading){
+  return <Loading></Loading>
+ }
   return (
     <div className="overflow-x-auto">
       <h1 className="my-5 text-3xl font-semibold">My Appointments</h1>
@@ -34,7 +37,7 @@ const MyAppointments = () => {
           </tr>
         </thead>
         <tbody>
-          {bookings.map((book, i) => (
+          {bookings?.map((book, i) => (
             <tr className="hover" key={i}>
               <th>{i + 1}</th>
               <td>{book.patient}</td>

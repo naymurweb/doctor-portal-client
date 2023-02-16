@@ -3,11 +3,13 @@ import DashboardLayout from "../../Layout/DashboardLayout";
 import Main from "../../Layout/Main";
 import Appointment from "../../Pages/Appointment/Appointment/Appointment";
 import AllUsers from "../../Pages/Dashboard/AllUsers/AllUsers";
-import MyAppointments from "../../Pages/Dashboard/Dashboard/MyAppointments/MyAppointments";
+import AddDoctor from "../../Pages/Dashboard/AddDoctor/AddDoctor";
+import ManageDoctors from "../../Pages/Dashboard/ManageDoctors/ManageDoctors";
 import Home from "../../Pages/Home/Home/Home";
 import Login from "../../Pages/Login/Login";
 import SignUp from "../../Pages/SignUp/SignUp";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import MyAppointments from "../../Pages/Dashboard/MyAppointments/MyAppointments";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +39,12 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "/dashboard", element: <MyAppointments></MyAppointments> },
-      {path:'/dashboard/users',element:<AllUsers></AllUsers>} 
+      { path: "/dashboard/users", element: <AllUsers></AllUsers> },
+      { path: "/dashboard/addoctor", element: <AddDoctor></AddDoctor> },
+      {
+        path: "/dashboard/managedoctors",
+        element: <ManageDoctors></ManageDoctors>,
+      },
     ],
   },
 ]);

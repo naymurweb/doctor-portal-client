@@ -6,13 +6,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Contexts/AuthProvider";
 
 const SignUp = () => {
-  const [signupError, setSignupError] = useState("");
+    const [signupError, setSignupError] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm();
 
   const navigate = useNavigate();
   const location = useLocation();

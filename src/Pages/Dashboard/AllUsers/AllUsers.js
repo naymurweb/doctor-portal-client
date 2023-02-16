@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { toast } from "react-hot-toast";
 import { useQuery } from "react-query";
 
@@ -21,6 +21,7 @@ const AllUsers = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if (data.modifiedCount > 0) {
           toast.success("Make admin successful");
           refetch();
